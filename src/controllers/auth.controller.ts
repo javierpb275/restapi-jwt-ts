@@ -11,8 +11,11 @@ export const signup = async (req: Request, res: Response) => {
   });
   const savedUser = await user.save();
   //create token:
-  jwt.sign({_id:savedUser._id}, '');
-  res.send(user);
+  const token: string = jwt.sign(
+    { _id: savedUser._id },
+    `${process.env.TOKEN_SECRET}` || "tokentest"
+  );
+  res.header("auth-token", token).json(savedUser);
 };
 
 export const signin = (req: Request, res: Response) => {

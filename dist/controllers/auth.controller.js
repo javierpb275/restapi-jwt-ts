@@ -24,8 +24,8 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
     const savedUser = yield user.save();
     //create token:
-    jsonwebtoken_1.default.sign({ _id: savedUser._id }, '');
-    res.send(user);
+    const token = jsonwebtoken_1.default.sign({ _id: savedUser._id }, `${process.env.TOKEN_SECRET}` || "tokentest");
+    res.header("auth-token", token).json(savedUser);
 });
 exports.signup = signup;
 const signin = (req, res) => {
