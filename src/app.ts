@@ -11,6 +11,6 @@ app.set("port", process.env.PORT);
 app.use(morgan("dev"));
 
 //routes
-app.use(authRoutes);
+app.use("/api/auth", authRoutes);
 
 export default app;
