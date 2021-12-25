@@ -8,6 +8,7 @@ const app: Application = express();
 app.set("port", process.env.PORT);
 
 //middlewares
+app.use(express.json());
 app.use(morgan("dev"));
 
 //routes

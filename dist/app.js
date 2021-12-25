@@ -10,6 +10,7 @@ const app = (0, express_1.default)();
 //settings
 app.set("port", process.env.PORT);
 //middlewares
+app.use(express_1.default.json());
 app.use((0, morgan_1.default)("dev"));
 //routes
 app.use("/api/auth", auth_1.default);
