@@ -14,13 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.profile = exports.signin = exports.signup = void 0;
 const User_1 = __importDefault(require("../models/User"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //create and save user:
     const user = new User_1.default({
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
     });
-    yield user.save();
+    const savedUser = yield user.save();
+    //create token:
+    jsonwebtoken_1.default.sign({ _id: savedUser._id }, '');
     res.send(user);
 });
 exports.signup = signup;
