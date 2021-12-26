@@ -75,5 +75,6 @@
     "./src/**/*" //check all the files inside folders that have extension .ts
   ],
   //EXCLUDE: and we want to exclude the folder node_modules. we don't want typescript to check that folder
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "files": ["types.d.ts"]
 }
