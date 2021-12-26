@@ -29,9 +29,18 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header("auth-token", token).json(savedUser);
 });
 exports.signup = signup;
-const signin = (req, res) => {
-    res.send("signin");
-};
+const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield User_1.default.findOne({ email: req.body.email });
+    if (!user) {
+        return res.status(400).json("email or password is wrong");
+    }
+    const correctPassword = yield user.validatePassword(req.body.password);
+    if (!correctPassword) {
+        return res.status(400).json("email or password is wrong");
+    }
+    const token = jsonwebtoken_1.default.sign({ _id: user._id }, `${process.env.TOKEN_SECRET}` || "tokentest", { expiresIn: 60 * 60 * 24 });
+    res.header("auth-token", token).json(user);
+});
 exports.signin = signin;
 const profile = (req, res) => {
     res.send("profile");

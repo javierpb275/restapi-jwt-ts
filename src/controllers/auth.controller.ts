@@ -10,7 +10,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     password: req.body.password,
   });
   user.password = await user.encryptPassword(user.password);
-  const savedUser = await user.save();
+  const savedUser: IUser = await user.save();
   //create token:
   const token: string = jwt.sign(
     { _id: savedUser._id },
@@ -19,8 +19,23 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   res.header("auth-token", token).json(savedUser);
 };
 
-export const signin = (req: Request, res: Response) => {
-  res.send("signin");
+export const signin = async (req: Request, res: Response) => {
+  const user: IUser | null = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(400).json("email or password is wrong");
+  }
+  const correctPassword: boolean = await user.validatePassword(
+    req.body.password
+  );
+  if (!correctPassword) {
+    return res.status(400).json("email or password is wrong");
+  }
+  const token: string = jwt.sign(
+    { _id: user._id },
+    `${process.env.TOKEN_SECRET}` || "tokentest",
+    { expiresIn: 60 * 60 * 24 }
+  );
+  res.header("auth-token", token).json(user);
 };
 
 export const profile = (req: Request, res: Response) => {
